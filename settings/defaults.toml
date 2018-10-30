@@ -1,0 +1,8 @@
+[geth]
+title = "Geth"
+
+[im]
+[im.gitter]
+token = "12345"
+active_room = "12345"
+signature_message_bot = "**[geth]**"

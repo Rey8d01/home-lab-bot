@@ -2,7 +2,7 @@
 
 import json
 
-from core.settings import settings
+from core.config import settings
 from core.commands import handle_command
 from core.exceptions import UndefinedCommand
 from core.gateways.gitter import Gitter

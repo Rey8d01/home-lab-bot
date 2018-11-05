@@ -1,5 +1,6 @@
 [geth]
 title = "Geth"
+debug = true
 
 [im]
 [im.gitter]

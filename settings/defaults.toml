@@ -1,9 +1,15 @@
 [geth]
+# Общие настройки.
 title = "Geth"
 debug = true
+default_im = "cli"
 
 [im]
+[im.cli]
+# CLI для тестирования команд (без настроек).
+
 [im.gitter]
+# gitter.im
 token = "12345"
 active_room = "12345"
 signature_message_bot = "**[geth]**"

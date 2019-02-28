@@ -9,6 +9,10 @@ class ReadSettingsException(CoreException):
     pass
 
 
+class UndefinedGateway(CoreException):
+    pass
+
+
 class UndefinedCommand(CoreException):
     pass
 

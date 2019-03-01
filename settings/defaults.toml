@@ -6,10 +6,12 @@ default_im = "cli"
 
 [im]
 [im.cli]
-# CLI для тестирования команд (без настроек).
+# CLI для тестирования команд.
+signature_start_command = "/"
 
 [im.gitter]
 # gitter.im
 token = "12345"
 active_room = "12345"
 signature_message_bot = "**[geth]**"
+signature_start_command = "/"

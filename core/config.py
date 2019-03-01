@@ -10,6 +10,7 @@
 
 """
 
+import logging
 import os
 import typing
 from pathlib import Path
@@ -38,12 +39,17 @@ class Config:
         if not self.__shared_state:
             self.paths_settings = ()
             self.settings = {}
+            self.logger = None
             self.load()
 
     def load(self):
         """Считывание настроек из файлов и загрузка их в состояние класса настроек."""
         self.paths_settings = tuple(filter(None, (self._path_default_settings(), self._path_local_settings())))
         self.settings = anyconfig.load(self.paths_settings)
+
+        level = logging.DEBUG if self.settings["geth"]["debug"] else logging.WARNING
+        logging.basicConfig(level=level)
+        self.logger = logging.getLogger("geth")
 
     def _path_default_settings(self) -> str:
         """Подключение дефолтной конфигурации."""

@@ -5,4 +5,7 @@ from core.gateways import adapter
 
 
 if __name__ == "__main__":
-    adapter(Config().settings)
+    config = Config()
+    config.logger.info("Start bot")
+    adapter(config)
+

@@ -60,7 +60,7 @@ class Gateway(GatewayInterface):
     def send_message_in_room(self, room_id: str, text: str):
         """Отправит сообщение в комнату."""
         url = f"{self.url_rest_api}/rooms/{room_id}/chatMessages"
-        payload = {"text": f"{self.pre_text_message}\n{text}"}
+        payload = {"text": f"{self.signature_message_bot}\n{text}"}
         request = requests.post(url, data=json.dumps(payload), headers=self.headers)
         return request
 

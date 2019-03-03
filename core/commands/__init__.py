@@ -11,11 +11,13 @@
 
 """
 
+import logging
 from importlib import import_module
 from importlib import resources
 
 from core.exceptions import UndefinedCommand, CoreWarning
 
+logger = logging.getLogger(__name__)
 COMMANDS = {}
 
 
@@ -49,6 +51,7 @@ def _import_commands():
     """
     for name in resources.contents(__name__):
         if name.endswith(".py") and not name == "__init__.py":
+            logger.debug(f"Import module of commands {name!r}")
             import_module(f"{__name__}.{name[:-3]}")
 
 
@@ -65,6 +68,8 @@ def handle_command(command: str) -> str:
         if command in COMMANDS:
             fn_command = COMMANDS[command]
         else:
+            logger.warning(f"Call undefined command {command!r}")
             raise UndefinedCommand() from None
 
+    logger.debug(f"Call command {command!r}")
     return fn_command()

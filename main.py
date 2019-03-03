@@ -1,11 +1,12 @@
 """Запуск бота."""
 
-from core.config import Config
 from core.gateways import adapter
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 if __name__ == "__main__":
-    config = Config()
-    config.logger.info("Start bot")
-    adapter(config)
+    logger.info("Start bot")
+    adapter()
 

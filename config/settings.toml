@@ -1,0 +1,21 @@
+# Все настройки можно перекрыть, согласно конфигурации и возможностям dynaconf, через переменные окружения.
+# Однако, настройки для конкретных IM следует задавать через env с особым вниманием:
+# название IM и все переменные идут в нижнем регистре - GETH_IM.gitter.token=12345
+# Так не возникнет проблем при объединении настроек.
+[default]
+# Общие настройки.
+title = "Geth"
+debug = true
+default_im = "cli"
+
+[default.im]
+[default.im.cli]
+# CLI для тестирования команд.
+signature_start_command = "/"
+
+[default.im.gitter]
+# gitter.im
+signature_start_command = "/"
+signature_message_bot = "**[geth]**"
+token = "12345"
+active_room = "12345"

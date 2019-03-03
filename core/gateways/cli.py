@@ -8,8 +8,8 @@ from core.gateways._libs import GatewayInterface
 class Gateway(GatewayInterface):
     """Command Line Interface API."""
 
-    def __init__(self, signature_start_command: str = ""):
-        self.signature_start_command = signature_start_command
+    def __init__(self, settings_im):
+        self.signature_start_command = settings_im["signature_start_command"]
 
     def talk(self):
         while True:

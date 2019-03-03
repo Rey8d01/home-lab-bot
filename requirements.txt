@@ -3,4 +3,4 @@ jupyter
 requests
 requests_html
 toml
-anyconfig
+dynaconf

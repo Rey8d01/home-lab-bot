@@ -16,12 +16,11 @@ from core.gateways._libs import GatewayInterface
 class Gateway(GatewayInterface):
     """Gitter API."""
 
-    def __init__(self, token: str, active_room: str, signature_message_bot: str = "",
-                 signature_start_command: str = ""):
-        self.token = token
-        self.active_room = active_room
-        self.signature_message_bot = signature_message_bot
-        self.signature_start_command = signature_start_command
+    def __init__(self, settings_im):
+        self.token = settings_im["token"]
+        self.active_room = settings_im["active_room"]
+        self.signature_message_bot = settings_im["signature_message_bot"]
+        self.signature_start_command = settings_im["signature_start_command"]
 
         self.url_rest_api = "https://api.gitter.im/v1"
         self.url_stream_api = "https://stream.gitter.im/v1"

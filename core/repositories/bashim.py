@@ -13,7 +13,7 @@ class BashimRepository:
         """Вернет случайную цитату."""
         session = HTMLSession()
         request = session.get("https://bash.im/random")
-        element_quote = request.html.find(".quote .text", first=True)
+        element_quote = request.html.find(".quote .quote__body", first=True)
         if element_quote:
             return element_quote.text
         return ""

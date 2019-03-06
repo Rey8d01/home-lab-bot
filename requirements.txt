@@ -4,3 +4,4 @@ requests
 requests_html
 toml
 dynaconf
+telebot

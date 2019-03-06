@@ -19,3 +19,7 @@ signature_start_command = "/"
 signature_message_bot = "**[geth]**"
 token = "12345"
 active_room = "12345"
+
+[default.im.telegram]
+# telegram.org
+token = 12345

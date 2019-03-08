@@ -5,3 +5,4 @@ requests_html
 toml
 dynaconf
 PyTelegramBotAPI
+praw

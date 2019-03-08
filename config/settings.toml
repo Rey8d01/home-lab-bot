@@ -23,3 +23,9 @@ active_room = "12345"
 [default.im.telegram]
 # telegram.org
 token = 12345
+
+[default.repos]
+[default.repos.reddit]
+client_id = "12345"
+client_secret = "12345"
+subs = []

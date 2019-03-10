@@ -12,6 +12,7 @@
 """
 
 import logging
+from dataclasses import dataclass
 from importlib import import_module
 from importlib import resources
 
@@ -19,6 +20,19 @@ from core.exceptions import UndefinedCommand, CoreWarning
 
 logger = logging.getLogger(__name__)
 COMMANDS = {}
+
+
+@dataclass
+class ResultCommandText:
+    """Результат выполнения команды с текстом."""
+    text: str
+
+
+@dataclass
+class ResultCommandTextPicture:
+    """Результат выполнения команды с текстом и URL до картинки."""
+    text: str
+    url_picture: str
 
 
 def register_command(func):

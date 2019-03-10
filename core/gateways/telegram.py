@@ -10,7 +10,8 @@ import time
 
 import telebot
 
-from core.commands import handle_command
+from core.commands import handle_command, ResultCommandText, ResultCommandTextPicture, \
+    __dir__ as list_available_commands
 from core.exceptions import UndefinedCommand
 from core.gateways._libs import GatewayInterface
 
@@ -27,14 +28,21 @@ class Gateway(GatewayInterface):
     def talk(self):
         """Запускает интерфейс общения с чатом в telegram."""
 
-        @self.telebot.message_handler(content_types=['text'])
+        @self.telebot.message_handler(commands=list_available_commands())
         def message_handler(message):
             message_text = str(message.text).strip()
             try:
                 result_command = handle_command(message_text)
-                self.telebot.send_message(message.from_user.id, result_command)
             except UndefinedCommand:
-                pass
+                return
+
+            printable_result = "Unknown result type"
+            if isinstance(result_command, ResultCommandText):
+                printable_result = result_command.text
+            elif isinstance(result_command, ResultCommandTextPicture):
+                printable_result = result_command.text
+                self.telebot.send_photo(message.from_user.id, result_command.url_picture)
+            self.telebot.send_message(message.from_user.id, printable_result)
 
         while True:
             try:

@@ -8,7 +8,7 @@ import json
 
 import requests
 
-from core.commands import handle_command
+from core.commands import handle_command, ResultCommandText, ResultCommandTextPicture
 from core.exceptions import UndefinedCommand
 from core.gateways._libs import GatewayInterface
 
@@ -48,7 +48,14 @@ class Gateway(GatewayInterface):
                 result_command = handle_command(message_text)
             except UndefinedCommand:
                 continue
-            self.send_message_in_room(self.active_room, result_command)
+
+            printable_result = "Unknown result type"
+            if isinstance(result_command, ResultCommandText):
+                printable_result = result_command.text
+            elif isinstance(result_command, ResultCommandTextPicture):
+                printable_result = f"""{result_command.text} 
+                    ![pic]({result_command.url_picture})"""
+            self.send_message_in_room(self.active_room, printable_result)
 
     def list_rooms(self):
         """Вернет всю информацию по всем доступным комнатам."""

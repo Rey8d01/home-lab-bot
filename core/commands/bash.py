@@ -1,10 +1,10 @@
 """Команды для использования цитатника."""
 
 from core.repositories.bashim import BashimRepository
-from . import register_command
+from . import register_command, ResultCommandText
 
 
 @register_command
-def _bash() -> str:
+def _bash() -> ResultCommandText:
     """Покажет случайную цитату с bash.im"""
-    return BashimRepository().get_random_quote()
+    return ResultCommandText(text=BashimRepository().get_random_quote())

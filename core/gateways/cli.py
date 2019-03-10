@@ -1,6 +1,6 @@
 """Интерфейс работы с CLI."""
 
-from core.commands import handle_command
+from core.commands import handle_command, ResultCommandText, ResultCommandTextPicture
 from core.exceptions import UndefinedCommand
 from core.gateways._libs import GatewayInterface
 
@@ -24,4 +24,10 @@ class Gateway(GatewayInterface):
                 result_command = handle_command(message_text)
             except UndefinedCommand:
                 continue
-            print(result_command)
+
+            printable_result = "Unknown result type"
+            if isinstance(result_command, ResultCommandText):
+                printable_result = result_command.text
+            elif isinstance(result_command, ResultCommandTextPicture):
+                printable_result = f"{result_command.text}, {result_command.url_picture}"
+            print(printable_result)

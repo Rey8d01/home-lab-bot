@@ -1,6 +1,7 @@
 """Репозиторий запросов к reddit.com"""
 
 import random
+from typing import Optional, Tuple
 
 import praw
 
@@ -16,10 +17,28 @@ class RedditRepository:
             user_agent=settings.TITLE
         )
 
-    def get_random_post(self):
+    def get_random_latest_post(self) -> Optional[Tuple[str, str, str, Optional[str]]]:
+        """Вернет информацию по какому-нибудь последнему посту из заданных подписок.
+
+        Если не возникло проблем с получением поста то будет возвращен кортеж из 3х элементов:
+            - название сабреддита;
+            - URL поста;
+            - заголовок поста;
+            - URL картинки или поста.
+
+        """
         name_random_subreddit = random.choice(settings.REPOS.REDDIT.SUBS)
         if not name_random_subreddit:
-            return ""
+            return None
 
-        submission = self.reddit.subreddit(name_random_subreddit).random()
-        return f"{submission.title} {submission.url}"
+        # Пролистываем случайное количество постов.
+        submission = None
+        for submission in self.reddit.subreddit(name_random_subreddit).new(limit=random.randint(1, 11)):
+            pass
+        if not submission:
+            return None
+
+        url_picture = None
+        if hasattr(submission, "post_hint") and submission.post_hint == "image":
+            url_picture = submission.url
+        return name_random_subreddit, submission.shortlink, submission.title, url_picture

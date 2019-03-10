@@ -31,6 +31,8 @@ class Gateway(GatewayInterface):
         @self.telebot.message_handler(commands=list_available_commands())
         def message_handler(message):
             message_text = str(message.text).strip()
+            # Для обработки конкретного списка комманд первым символом из tm приходит / всегда.
+            message_text = message_text[1:]
             try:
                 result_command = handle_command(message_text)
             except UndefinedCommand:

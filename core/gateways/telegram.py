@@ -4,10 +4,11 @@ https://core.telegram.org/bots/api
 https://github.com/eternnoir/pyTelegramBotAPI
 
 """
-
+import io
 import logging
 import time
 
+import requests
 import telebot
 
 from core.commands import handle_command, ResultCommandText, ResultCommandTextPicture, \
@@ -43,7 +44,10 @@ class Gateway(GatewayInterface):
                 printable_result = result_command.text
             elif isinstance(result_command, ResultCommandTextPicture):
                 printable_result = result_command.text
-                self.telebot.send_photo(message.from_user.id, result_command.url_picture)
+                # Картинки требуют предварительной загрузки и отправки в бинарном виде.
+                if result_command.url_picture:
+                    picture = io.BytesIO(requests.get(result_command.url_picture).content)
+                    self.telebot.send_photo(message.from_user.id, picture)
             self.telebot.send_message(message.from_user.id, printable_result)
 
         while True:

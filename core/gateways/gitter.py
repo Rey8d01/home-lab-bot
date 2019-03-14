@@ -53,8 +53,7 @@ class Gateway(GatewayInterface):
             if isinstance(result_command, ResultCommandText):
                 printable_result = result_command.text
             elif isinstance(result_command, ResultCommandTextPicture):
-                printable_result = f"""{result_command.text} 
-                    ![pic]({result_command.url_picture})"""
+                printable_result = f"""{result_command.text}\n![pic]({result_command.url_picture})"""
             self.send_message_in_room(self.active_room, printable_result)
 
     def list_rooms(self):

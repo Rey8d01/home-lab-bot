@@ -69,21 +69,27 @@ def _import_commands():
             import_module(f"{__name__}.{name[:-3]}")
 
 
-def handle_command(command: str) -> str:
+def handle_command(raw_command: str) -> str:
     """Обработка комманд.
 
     Если команда не была найдена при первом обращении, происходит импорт всех команд и повторный ее вызов.
 
     """
+    parts_command = raw_command.split(maxsplit=1)
+    name_command = parts_command[0]
+    args_command = ""
+    if len(parts_command) > 1:
+        args_command = parts_command[1]
+
     try:
-        fn_command = COMMANDS[command]
+        fn_command = COMMANDS[name_command]
     except KeyError:
         _import_commands()
-        if command in COMMANDS:
-            fn_command = COMMANDS[command]
+        if name_command in COMMANDS:
+            fn_command = COMMANDS[name_command]
         else:
-            logger.warning(f"Call undefined command {command!r}")
+            logger.warning(f"Call undefined command {name_command!r}")
             raise UndefinedCommand() from None
 
-    logger.debug(f"Call command {command!r}")
-    return fn_command()
+    logger.debug(f"Call command {name_command!r}")
+    return fn_command(args_command)

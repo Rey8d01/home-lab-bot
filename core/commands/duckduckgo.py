@@ -7,9 +7,9 @@ import requests
 from . import register_command, ResultCommandText, ResultCommandTextPicture
 
 
-@register_command
+@register_command(aliases=("s", "search", "ddg", "поиск"))
 def _s(*args, **kwargs) -> Union[ResultCommandText, ResultCommandTextPicture]:
-    """Search - простой поиск через duckduckgo."""
+    """Search - простой поиск через duckduckgo, принимает строку для поиска."""
     raw_query = args[0]
     complete_query = "+".join(raw_query.split())
     request = requests.get(f"https://api.duckduckgo.com/?q={complete_query}&format=json")

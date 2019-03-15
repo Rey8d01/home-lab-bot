@@ -2,12 +2,12 @@
 
 Все команды публикуются в текущем модуле и будут динамически подгружатся (без явного импорта).
 
-Правила публикации команды:
+Функция команды должна быть задекорирована через register_command,
+все правила и разрешения будут реализовываться через нее.
 
-    - имя функции команды используется для ее вызова через интерфейс, поэтому оно должно быть удобным;
-    - имя функции команды должно начинатся с _ (нижнее подчеркивание) для того,
-    чтобы была возможность безопасно использовать имена зарезервированных функций, при регистрации символ будет удален;
-    - функция команды должна быть задекорирована через register_command;
+Функция команды должна возвращать результат в виде объекта класса-результата, которые объявлены ниже.
+Это нужно чтобы стандартизировать ответ,
+а каждая платформа сама сможет его интерпретировать и отправлять результат в нужном для нее виде.
 
 """
 
@@ -20,6 +20,7 @@ from core.exceptions import UndefinedCommand, CoreWarning
 
 logger = logging.getLogger(__name__)
 COMMANDS = {}
+HELPERS_FOR_COMMANDS = {}
 
 
 @dataclass
@@ -35,20 +36,51 @@ class ResultCommandTextPicture:
     url_picture: str
 
 
-def register_command(func):
-    """Декоратор для регистрации функций команд.
+def _process_register_command(func, aliases: list):
+    """Процесс сохранения зарегистрированных комманд.
 
-    Срезается _ у команды чтобы была возможность использовать ее нормальное имя.
+    В случае дефолтного варианта (без списка вызываемых коммнд для функции) с
+    резается _ у имя функции чтобы была возможность использовать ее имя.
+
     Проверяется наличие команд с одинаковыми именами.
 
+    Генерируется описания команд для _help фнукции.
+
     """
-    name: str = func.__name__
-    if name.startswith("_"):
-        name = name[1:]
-    if name in COMMANDS:
-        raise CoreWarning(f"Command {func.__name__!r} is not unique")
-    COMMANDS[name] = func
+    if not aliases:
+        alias: str = func.__name__
+        if alias.startswith("_"):
+            alias = alias[1:]
+        aliases = (alias,)
+
+    wrong_commands = set(COMMANDS).intersection(aliases)
+    if wrong_commands:
+        raise CoreWarning(f"Commands {wrong_commands!r} are not unique")
+
+    for alias in aliases:
+        COMMANDS[alias] = func
+
+    first_alias = aliases[0]
+    other_aliases = f" ({' '.join(aliases[1:])})" if aliases[1:] else ""
+    HELPERS_FOR_COMMANDS[first_alias] = f"{first_alias}{other_aliases} - {func.__doc__}"
+
     return func
+
+
+def register_command(func=None, aliases: list = ()):
+    """Декоратор для регистрации функций команд.
+
+    Можно декоратор использовать через вызов @register_command(), так и без @register_command.
+    Но лучше с вызовом чтобы передавать нормальный список команд для вызова функции.
+
+    """
+
+    def wrap(_func):
+        return _process_register_command(_func, aliases)
+
+    if func is None:
+        return wrap
+    return wrap(func)
 
 
 def __dir__():

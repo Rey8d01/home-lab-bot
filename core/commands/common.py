@@ -4,7 +4,7 @@ import os
 
 import requests
 
-from . import register_command, COMMANDS, ResultCommandText
+from . import register_command, HELPERS_FOR_COMMANDS, ResultCommandText
 
 
 @register_command
@@ -19,12 +19,10 @@ def _ping(*args, **kwargs) -> ResultCommandText:
     return ResultCommandText("Pong!")
 
 
-@register_command
+@register_command(aliases=("h", "help", "помощь"))
 def _help(*args, **kwargs) -> ResultCommandText:
     """Покажет эту справку по коммандам."""
-    return ResultCommandText(
-        "\n".join((f"{name_command} - {fn_command.__doc__}" for name_command, fn_command in COMMANDS.items()))
-    )
+    return ResultCommandText("\n".join((f"{help_text}" for help_text in HELPERS_FOR_COMMANDS.values())))
 
 
 @register_command

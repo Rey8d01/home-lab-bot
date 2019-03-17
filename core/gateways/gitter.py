@@ -5,12 +5,15 @@ https://developer.gitter.im/docs/welcome
 """
 
 import json
+import logging
 
 import requests
 
 from core.commands import handle_command, ResultCommandText, ResultCommandTextPicture
 from core.exceptions import UndefinedCommand
 from core.gateways._libs import GatewayInterface
+
+logger = logging.getLogger(__name__)
 
 
 class Gateway(GatewayInterface):
@@ -33,6 +36,7 @@ class Gateway(GatewayInterface):
     def talk(self):
         """Запускает интерфейс общения с чатом в gitter."""
         for encoded_message in self.listen_stream_messages(self.active_room):
+            logger.debug(f"Received message: {encoded_message!r}")
             decoded_message = json.loads(encoded_message)
             message_text = str(decoded_message["text"]).strip()
             # Если сообщение в чате исходит от бота - пропускаем обработку.

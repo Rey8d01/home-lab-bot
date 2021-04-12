@@ -14,7 +14,7 @@ from dynaconf import Dynaconf
 
 settings = Dynaconf(
     environments=True,
-    envvar_prefix="GETH",  # `envvar_prefix` = export envvars with `export DYNACONF_FOO=bar`.
+    envvar_prefix="GETH",  # `envvar_prefix` = export envvars with `export GETH_FOO=bar`.
     settings_files=("settings.toml", "local_settings.toml"),  # Порядок загрузки файлов - последние перекрывают предыдущие.
     MERGE_ENABLED_FOR_DYNACONF=True,
 )

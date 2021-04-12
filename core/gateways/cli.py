@@ -23,6 +23,7 @@ class Gateway(GatewayInterface):
             try:
                 result_command = handle_command(message_text)
             except UndefinedCommand:
+                print(f"Unknown command. Press {self.signature_start_command}help to get info about available commands.")
                 continue
 
             printable_result = "Unknown result type"

@@ -2,28 +2,36 @@
 # Однако, настройки для конкретных IM следует задавать через env с особым вниманием:
 # название IM и все переменные идут в нижнем регистре - GETH_IM.gitter.token=12345
 # Так не возникнет проблем при объединении настроек.
-[default]
+
 # Общие настройки.
+[default]
+# Имя бота.
 title = "Geth"
+# Отладочный режим работы.
 debug = true
+# Название IM платформы для которой будет запущен бот. По умолчанию cli для проверки работы.
 default_im = "cli"
 
+# Настройки для каждого IM.
 [default.im]
-[default.im.cli]
+
 # CLI для тестирования команд.
+[default.im.cli]
+# Символ с которого будет распознваться команда для бота.
 signature_start_command = "/"
 
-[default.im.gitter]
 # gitter.im
+[default.im.gitter]
 signature_start_command = "/"
 signature_message_bot = "**[geth]**"
 token = "12345"
 active_room = "12345"
 
-[default.im.telegram]
 # telegram.org
+[default.im.telegram]
 token = 12345
 
+# Настройки для репозиториев запросов ко внешним источникам информации.
 [default.repos]
 [default.repos.reddit]
 client_id = "12345"

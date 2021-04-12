@@ -36,7 +36,7 @@ class ResultCommandTextPicture:
     url_picture: str
 
 
-def _process_register_command(func, aliases: list):
+def _process_register_command(func, aliases: tuple):
     """Процесс сохранения зарегистрированных команд.
 
     В случае дефолтного варианта (без списка вызываемых команд для функции) срезается _ у имени функции,
@@ -67,7 +67,7 @@ def _process_register_command(func, aliases: list):
     return func
 
 
-def register_command(func=None, aliases: list = ()):
+def register_command(func=None, aliases: tuple = ()):
     """Декоратор для регистрации функций команд.
 
     Можно декоратор использовать через вызов @register_command(), так и без @register_command.
@@ -102,26 +102,23 @@ def _import_commands():
 
 
 def handle_command(raw_command: str) -> str:
-    """Обработка команд.
+    """Обработка команд."""
+    command_parts = raw_command.split(maxsplit=1)
+    command_name = command_parts[0]
+    command_args = ""
+    if len(command_parts) > 1:
+        command_args = command_parts[1]
 
-    Если команда не была найдена при первом обращении, происходит импорт всех команд и повторный ее вызов.
-
-    """
-    parts_command = raw_command.split(maxsplit=1)
-    name_command = parts_command[0]
-    args_command = ""
-    if len(parts_command) > 1:
-        args_command = parts_command[1]
-
+    # Если команда не была найдена при первом обращении, происходит импорт всех команд и повторный ее вызов.
     try:
-        fn_command = COMMANDS[name_command]
+        fn_command = COMMANDS[command_name]
     except KeyError:
         _import_commands()
-        if name_command in COMMANDS:
-            fn_command = COMMANDS[name_command]
+        if command_name in COMMANDS:
+            fn_command = COMMANDS[command_name]
         else:
-            logger.warning(f"Call undefined command {name_command!r}")
+            logger.warning(f"Call undefined command {command_name!r}")
             raise UndefinedCommand() from None
 
-    logger.debug(f"Call command {name_command!r}")
-    return fn_command(args_command)
+    logger.debug(f"Call command {command_name!r}")
+    return fn_command(command_args)

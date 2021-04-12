@@ -19,9 +19,9 @@ def _ping(*args, **kwargs) -> ResultCommandText:
     return ResultCommandText("Pong!")
 
 
-@register_command(aliases=("h", "help", "помощь"))
+@register_command(aliases=("h", "help", "помощь", "?"))
 def _help(*args, **kwargs) -> ResultCommandText:
-    """Покажет эту справку по коммандам."""
+    """Покажет эту справку по командам."""
     return ResultCommandText("\n".join((f"{help_text}" for help_text in HELPERS_FOR_COMMANDS.values())))
 
 

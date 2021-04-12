@@ -10,13 +10,13 @@
 
 import logging
 
-from dynaconf import LazySettings
+from dynaconf import Dynaconf
 
-# Settings
-settings = LazySettings(
-    SETTINGS_MODULE="config/settings.toml",
+settings = Dynaconf(
+    environments=True,
+    envvar_prefix="GETH",  # `envvar_prefix` = export envvars with `export DYNACONF_FOO=bar`.
+    settings_files=("settings.toml", "local_settings.toml"),  # Порядок загрузки файлов - последние перекрывают предыдущие.
     MERGE_ENABLED_FOR_DYNACONF=True,
-    GLOBAL_ENV_FOR_DYNACONF="GETH"
 )
 
 # Logging

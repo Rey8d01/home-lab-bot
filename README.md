@@ -1,6 +1,6 @@
 # geth
 
-###### core bot
+> core bot
 
 ## Цели
 
@@ -10,7 +10,7 @@
 
 ## Requirements
 
-python 3.7
+python 3.9
 
 ## Heroku
 

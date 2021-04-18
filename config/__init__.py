@@ -24,4 +24,4 @@ _log_level = logging.DEBUG if settings.DEBUG else logging.WARNING
 logging.basicConfig(level=_log_level)
 logger = logging.getLogger(__name__)
 
-logger.debug("Settings and logger are loaded")
+logger.info("Settings and logger are loaded")

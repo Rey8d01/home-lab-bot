@@ -19,8 +19,8 @@ from importlib import resources
 from core.exceptions import UndefinedCommand, CoreWarning
 
 logger = logging.getLogger(__name__)
-COMMANDS = {}
-HELPERS_FOR_COMMANDS = {}
+COMMANDS = {}  # Список зарегистрированных команд для вызова.
+HELPERS_FOR_COMMANDS = {}  # Перечень мануалов для команд.
 
 
 @dataclass

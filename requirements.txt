@@ -6,3 +6,4 @@ toml
 dynaconf
 PyTelegramBotAPI
 praw
+pytest

@@ -1,5 +1,7 @@
 # geth
 
+[![Build Status](http://drone.melchior.reynet/api/badges/rey/geth/status.svg)](http://drone.melchior.reynet/rey/geth)
+
 > core bot
 
 ## Цели

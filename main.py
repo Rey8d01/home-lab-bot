@@ -8,9 +8,17 @@
 from core.gateways import adapter
 import logging
 
+from core.services.signals import setup_signal_handlers
+
 logger = logging.getLogger(__name__)
 
 
 if __name__ == "__main__":
     logger.info("Start bot")
-    adapter()
+
+    setup_signal_handlers()
+    try:
+        adapter()
+    except SystemExit as e:
+        # todo shutdown
+        pass

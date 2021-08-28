@@ -8,7 +8,7 @@ from . import register_command, ResultCommandText, ResultCommandTextPicture
 
 
 @register_command(aliases=("s", "search", "ddg", "поиск"))
-def _s(*args, **kwargs) -> Union[ResultCommandText, ResultCommandTextPicture]:
+def search(*args) -> Union[ResultCommandText, ResultCommandTextPicture]:
     """Search - простой поиск через duckduckgo, принимает строку для поиска."""
     raw_query = args[0]
     complete_query = "+".join(raw_query.split())

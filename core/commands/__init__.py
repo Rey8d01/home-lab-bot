@@ -5,12 +5,15 @@
 Функция команды должна быть задекорирована через register_command,
 все правила и разрешения будут реализовываться через нее.
 
+Сигнатуры функций команд должны иметь как минимум (*args) для игнорирования случайно переданных лишних аргументов.
+
 Функция команды должна возвращать результат в виде объекта класса-результата, которые объявлены ниже.
 Это нужно чтобы стандартизировать ответ,
 а каждая платформа сама сможет его интерпретировать и отправлять результат в нужном для нее виде.
 
 """
 
+import time
 import logging
 from dataclasses import dataclass
 from importlib import import_module
@@ -39,18 +42,13 @@ class ResultCommandTextPicture:
 def _process_register_command(func, aliases: tuple):
     """Процесс сохранения зарегистрированных команд.
 
-    В случае дефолтного варианта (без списка вызываемых команд для функции) срезается _ у имени функции,
-    чтобы была возможность использовать ее имя.
-
     Проверяется наличие команд с одинаковыми именами.
-
-    Генерируется описания команд для _help фнукции.
+    Генерируется описания команд для команды `help`.
 
     """
     if not aliases:
+        # Если алиасов не было указано, используется собственное имя функции для команды.
         alias: str = func.__name__
-        if alias.startswith("_"):
-            alias = alias[1:]
         aliases = (alias,)
 
     wrong_commands = set(COMMANDS).intersection(aliases)
@@ -71,7 +69,7 @@ def register_command(func=None, aliases: tuple = ()):
     """Декоратор для регистрации функций команд.
 
     Можно декоратор использовать через вызов @register_command(), так и без @register_command.
-    Но лучше с вызовом чтобы передавать нормальный список команд для вызова функции.
+    Но лучше с вызовом чтобы передавать нормальный список алиасов для вызова функции.
 
     """
 
@@ -121,4 +119,9 @@ def handle_command(raw_command: str) -> str:
             raise UndefinedCommand() from None
 
     logger.debug(f"Call command {command_name!r}")
-    return fn_command(command_args)
+    command_start_time = time.time()
+    result_command = fn_command(command_args)
+    command_delta = int((time.time() - command_start_time) * 1000)
+    logger.debug(f"Call command {command_name!r} ended in {command_delta} ms")
+
+    return result_command

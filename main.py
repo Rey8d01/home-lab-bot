@@ -5,7 +5,7 @@
 
 """
 
-from core.gateways import adapter
+from core.gateways import start_talk
 import logging
 
 from core.services.signals import setup_signal_handlers
@@ -18,7 +18,7 @@ if __name__ == "__main__":
 
     setup_signal_handlers()
     try:
-        adapter()
+        start_talk()
     except SystemExit as e:
         # todo shutdown
         pass

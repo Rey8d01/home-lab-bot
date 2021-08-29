@@ -13,7 +13,7 @@ import telebot
 
 from core.commands import handle_command, ResultCommandText, ResultCommandTextPicture, \
     __dir__ as list_available_commands
-from core.exceptions import UndefinedCommand
+from core.exceptions import UndefinedCommand, ErrorCommand
 from core.gateways._libs import GatewayInterface
 
 logger = logging.getLogger(__name__)
@@ -38,6 +38,8 @@ class Gateway(GatewayInterface):
                 result_command = handle_command(message_text)
             except UndefinedCommand:
                 return
+            except ErrorCommand:
+                return
 
             printable_result = "Unknown result type"
             if isinstance(result_command, ResultCommandText):
@@ -45,8 +47,8 @@ class Gateway(GatewayInterface):
             elif isinstance(result_command, ResultCommandTextPicture):
                 printable_result = result_command.text
                 # Картинки требуют предварительной загрузки и отправки в бинарном виде.
-                if result_command.url_picture:
-                    picture = io.BytesIO(requests.get(result_command.url_picture).content)
+                if result_command.picture_url:
+                    picture = io.BytesIO(requests.get(result_command.picture_url).content)
                     self.telebot.send_photo(message.from_user.id, picture)
             self.telebot.send_message(message.from_user.id, printable_result)
 

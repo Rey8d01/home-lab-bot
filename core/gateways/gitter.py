@@ -10,7 +10,7 @@ import logging
 import requests
 
 from core.commands import handle_command, ResultCommandText, ResultCommandTextPicture
-from core.exceptions import UndefinedCommand
+from core.exceptions import UndefinedCommand, ErrorCommand
 from core.gateways._libs import GatewayInterface
 
 logger = logging.getLogger(__name__)
@@ -52,12 +52,14 @@ class Gateway(GatewayInterface):
                 result_command = handle_command(message_text)
             except UndefinedCommand:
                 continue
+            except ErrorCommand:
+                continue
 
             printable_result = "Unknown result type"
             if isinstance(result_command, ResultCommandText):
                 printable_result = result_command.text
             elif isinstance(result_command, ResultCommandTextPicture):
-                printable_result = f"""{result_command.text}\n![pic]({result_command.url_picture})"""
+                printable_result = f"""{result_command.text}\n![pic]({result_command.picture_url})"""
             self.send_message_in_room(self.active_room, printable_result)
 
     def list_rooms(self):

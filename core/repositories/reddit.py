@@ -17,28 +17,23 @@ class RedditRepository:
             user_agent=settings.TITLE
         )
 
-    def get_random_latest_post(self) -> Optional[Tuple[str, str, str, Optional[str]]]:
-        """Вернет информацию по какому-нибудь последнему посту из заданных подписок.
+    def get_random_latest_post_by_subreddit(self, subreddit: str) -> Optional[Tuple[str, str, Optional[str]]]:
+        """Вернет информацию по какому-нибудь последнему посту из заданного сабреддита.
 
         Если не возникло проблем с получением поста то будет возвращен кортеж из 3х элементов:
-            - название сабреддита;
             - URL поста;
             - заголовок поста;
             - URL картинки или поста.
 
         """
-        name_random_subreddit = random.choice(settings.REPOS.REDDIT.SUBS)
-        if not name_random_subreddit:
-            return None
-
         # Пролистываем случайное количество постов.
         submission = None
-        for submission in self.reddit.subreddit(name_random_subreddit).new(limit=random.randint(1, 11)):
+        for submission in self.reddit.subreddit(subreddit).new(limit=random.randint(1, 11)):
             pass
         if not submission:
             return None
 
-        url_picture = None
+        picture_url = None
         if hasattr(submission, "post_hint") and submission.post_hint == "image":
-            url_picture = submission.url
-        return name_random_subreddit, submission.shortlink, submission.title, url_picture
+            picture_url = submission.url
+        return submission.shortlink, submission.title, picture_url

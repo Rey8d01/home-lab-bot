@@ -2,10 +2,10 @@
 
 Все команды публикуются в текущем модуле и будут динамически подгружаться (без явного импорта).
 
-Функция команды должна быть задекорирована через register_command,
+Каждая функция команды должна быть задекорирована через register_command,
 все правила и разрешения будут реализовываться через нее.
-
-Сигнатуры функций команд должны иметь как минимум (*args) для игнорирования случайно переданных лишних аргументов.
+Сигнатура функции команды должна иметь как минимум (*args) для игнорирования случайно переданных лишних аргументов.
+В общем случае все что идет после названия команды будет передано функцию в сыром виде, т.е. как строка.
 
 Функция команды должна возвращать результат в виде объекта класса-результата, которые объявлены ниже.
 Это нужно чтобы стандартизировать ответ,
@@ -19,7 +19,7 @@ from dataclasses import dataclass
 from importlib import import_module
 from importlib import resources
 
-from core.exceptions import UndefinedCommand, CoreWarning
+from core.exceptions import UndefinedCommand, CoreWarning, ErrorCommand
 
 logger = logging.getLogger(__name__)
 COMMANDS = {}  # Список зарегистрированных команд для вызова.
@@ -36,7 +36,7 @@ class ResultCommandText:
 class ResultCommandTextPicture:
     """Результат выполнения команды с текстом и URL до картинки."""
     text: str
-    url_picture: str
+    picture_url: str
 
 
 def _process_register_command(func, aliases: tuple):
@@ -120,7 +120,12 @@ def handle_command(raw_command: str) -> str:
 
     logger.debug(f"Call command {command_name!r}")
     command_start_time = time.time()
-    result_command = fn_command(command_args)
+    try:
+        result_command = fn_command(command_args)
+    except Exception as error:
+        logger.error("Error while executing command", exc_info=error)
+        raise ErrorCommand() from None
+
     command_delta = int((time.time() - command_start_time) * 1000)
     logger.debug(f"Call command {command_name!r} ended in {command_delta} ms")
 

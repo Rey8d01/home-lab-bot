@@ -13,7 +13,15 @@ class UndefinedGateway(CoreException):
     pass
 
 
-class UndefinedCommand(CoreException):
+class CommandException(CoreException):
+    pass
+
+
+class UndefinedCommand(CommandException):
+    pass
+
+
+class ErrorCommand(CommandException):
     pass
 
 

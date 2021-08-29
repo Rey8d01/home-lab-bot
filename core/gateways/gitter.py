@@ -19,11 +19,11 @@ logger = logging.getLogger(__name__)
 class Gateway(GatewayInterface):
     """Gitter API."""
 
-    def __init__(self, settings_im):
-        self.token = settings_im["token"]
-        self.active_room = settings_im["active_room"]
-        self.signature_message_bot = settings_im["signature_message_bot"]
-        self.signature_start_command = settings_im["signature_start_command"]
+    def __init__(self, im_settings):
+        self.token = im_settings["token"]
+        self.active_room = im_settings["active_room"]
+        self.signature_message_bot = im_settings["signature_message_bot"]
+        self.signature_start_command = im_settings["signature_start_command"]
 
         self.url_rest_api = "https://api.gitter.im/v1"
         self.url_stream_api = "https://stream.gitter.im/v1"

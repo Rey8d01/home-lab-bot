@@ -10,6 +10,7 @@ import time
 
 import requests
 import telebot
+from telebot.types import Message
 
 from core.commands import handle_command, ResultCommandText, ResultCommandTextPicture, \
     __dir__ as list_available_commands
@@ -22,17 +23,23 @@ logger = logging.getLogger(__name__)
 class Gateway(GatewayInterface):
     """Telegram API."""
 
-    def __init__(self, settings_im):
-        self.token = settings_im["token"]
+    def __init__(self, im_settings):
+        self.token = im_settings["token"]
         self.telebot = telebot.TeleBot(self.token)
 
     def talk(self):
-        """Запускает интерфейс общения с чатом в telegram."""
+        """Запускает интерфейс общения с чатом в telegram.
+
+        Общение происходит по схеме long polling и если в процессе соединения произошли ошибки,
+        то через некоторое время произойдет переподключение к telegram.
+
+        """
 
         @self.telebot.message_handler(commands=list_available_commands())
-        def message_handler(message):
+        def message_handler(message: Message):
             message_text = str(message.text).strip()
-            # Для обработки конкретного списка комманд первым символом из tm приходит / всегда.
+            logger.info(f"[TM] Received message {message_text}")
+            # Для обработки конкретного списка команд первым символом из tm приходит / всегда.
             message_text = message_text[1:]
             try:
                 result_command = handle_command(message_text)
@@ -55,6 +62,6 @@ class Gateway(GatewayInterface):
         while True:
             try:
                 self.telebot.polling(none_stop=True)
-            except Exception as e:
-                logger.debug("TM error, sleep", exc_info=e)
+            except Exception as error:
+                logger.debug("[TM] Connection error, sleep", exc_info=error)
                 time.sleep(15)

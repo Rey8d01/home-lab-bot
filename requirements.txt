@@ -1,9 +1,6 @@
-ipython
-jupyter
 requests
 requests_html
 toml
 dynaconf
 PyTelegramBotAPI
 praw
-pytest

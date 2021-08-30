@@ -9,6 +9,7 @@
 """
 
 import logging
+from pathlib import Path
 
 from dynaconf import Dynaconf
 
@@ -25,3 +26,7 @@ logging.basicConfig(level=_log_level)
 logger = logging.getLogger(__name__)
 
 logger.info("Settings and logger are loaded")
+
+# Настройка директории для хранения временных файлов и прочего локального барахла.
+LOCAL_TMP_PATH = Path() / "tmp"
+LOCAL_TMP_PATH.mkdir(mode=0o755, exist_ok=True)

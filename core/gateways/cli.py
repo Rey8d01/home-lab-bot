@@ -12,6 +12,7 @@ class Gateway(GatewayInterface):
         self.signature_start_command = im_settings["signature_start_command"]
 
     def talk(self):
+        print(f"Hi! Print a command which starts with {self.signature_start_command} example: {self.signature_start_command}help")
         while True:
             message_text = str(input("#")).strip()
 

@@ -13,7 +13,6 @@ import requests
 
 from config import LOCAL_TMP_PATH
 
-
 __currencies_info_created: Optional[float] = None  # Переменная модуля для локального отслеживания времени жизни кеша данных о валютах.
 CURRENCIES_CACHE_PATH = LOCAL_TMP_PATH / "currencies_cache.json"  # Путь до локального кеша валют.
 
@@ -27,9 +26,11 @@ def receive_currencies_info() -> Optional[Dict]:
 
         rates_request = requests.get(f"https://www.live-rates.com/rates")
         try:
-            rates_request.json()  # Если json парсится нормально и не выбрасывает ошибок, значит можно его закешировать.
-            with open(CURRENCIES_CACHE_PATH, "w", encoding="utf-8") as currencies_cache:
-                currencies_cache.write(rates_request.text)
+            # Если json парсится нормально и не выбрасывает ошибок, значит можно его закешировать.
+            rates_request_result = rates_request.json()
+            if "error" not in rates_request_result[0]:
+                with open(CURRENCIES_CACHE_PATH, "w", encoding="utf-8") as currencies_cache:
+                    currencies_cache.write(rates_request.text)
         except ValueError:
             pass
 
@@ -70,7 +71,7 @@ def get_rates_for_currency(source_currency: str, interesting_currencies: Iterabl
     interesting_currency_rates = {
         interesting_currency: all_currency_rates[source_currency][interesting_currency]
         for interesting_currency in interesting_currencies
-        if interesting_currency != source_currency
+        if interesting_currency != source_currency and all_currency_rates[source_currency][interesting_currency] != 0
     }
 
     return interesting_currency_rates

@@ -1,16 +1,13 @@
 """Команды для конвертации валют."""
 
-
-from typing import Union
-
-from . import register_command, ResultCommandText, ResultCommandTextPicture
+from . import register_command, ResultCommandText
 from ..repositories.currencies import get_rates_for_currency
 
 INTERESTING_CURRENCIES = frozenset(("USD", "EUR", "RUB"))  # Валюта для которой будут показаны конвертации.
 
 
 @register_command(aliases=("converter", "conv", "cur"))
-def converter(raw_query: str) -> Union[ResultCommandText, ResultCommandTextPicture]:
+def converter(raw_query: str) -> ResultCommandText:
     """Конвертер валют. Принимает сумму и название валюты (rub usd eur), отдает результат в других валютах"""
     try:
         source_currency_sum, source_currency_type = raw_query.split(maxsplit=1)

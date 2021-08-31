@@ -112,7 +112,7 @@ gen
 # jupyter
 *.ipynb
 
-### geth
+### HLB
 
 local_*
 /tmp

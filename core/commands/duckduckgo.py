@@ -8,9 +8,11 @@ from . import register_command, ResultCommandText, ResultCommandTextPicture
 
 
 @register_command(aliases=("s", "search", "ddg", "поиск"))
-def search(*args) -> Union[ResultCommandText, ResultCommandTextPicture]:
-    """Search - простой поиск через duckduckgo, принимает строку для поиска."""
-    raw_query = args[0]
+def search(raw_query: str, **kwargs) -> Union[ResultCommandText, ResultCommandTextPicture]:
+    """Search - простой поиск через duckduckgo, принимает строку для поиска: search cats"""
+    if not raw_query:
+        return ResultCommandText("Ничего не получилось найти :(")
+
     complete_query = "+".join(raw_query.split())
     request = requests.get(f"https://api.duckduckgo.com/?q={complete_query}&format=json")
     result_search_query = request.json()

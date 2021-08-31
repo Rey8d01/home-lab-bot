@@ -27,6 +27,7 @@ def receive_currencies_info() -> Optional[Dict]:
         rates_request = requests.get(f"https://www.live-rates.com/rates")
         try:
             # Если json парсится нормально и не выбрасывает ошибок, значит можно его закешировать.
+            # В противном случае старый кеш тоже можно использовать.
             rates_request_result = rates_request.json()
             if "error" not in rates_request_result[0]:
                 with open(CURRENCIES_CACHE_PATH, "w", encoding="utf-8") as currencies_cache:

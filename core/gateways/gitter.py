@@ -46,13 +46,15 @@ class Gateway(GatewayInterface):
             if self.signature_start_command:
                 if not message_text.startswith(self.signature_start_command):
                     continue
-                message_text = message_text[len(self.signature_start_command):]
+                message_text = message_text.removeprefix(self.signature_start_command)
 
             try:
                 result_command = handle_command(message_text)
             except UndefinedCommand:
+                self.send_message_in_room(self.active_room, "Undefined command")
                 continue
             except ErrorCommand:
+                self.send_message_in_room(self.active_room, "Error command")
                 continue
 
             printable_result = "Unknown result type"

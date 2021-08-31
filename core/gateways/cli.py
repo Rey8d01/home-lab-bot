@@ -12,17 +12,21 @@ class Gateway(GatewayInterface):
         self.signature_start_command = im_settings["signature_start_command"]
 
     def talk(self):
-        print(f"Hi! Print a command which starts with {self.signature_start_command} example: {self.signature_start_command}help")
+        print(f"Hi! Print a command, example: {self.signature_start_command}help")
+        if self.signature_start_command:
+            print(f"All commands start with {self.signature_start_command}")
+
         while True:
             message_text = str(input("#")).strip()
 
             if self.signature_start_command:
                 if not message_text.startswith(self.signature_start_command):
                     continue
-                message_text = message_text[len(self.signature_start_command):]
+                message_text = message_text.removeprefix(self.signature_start_command)
 
             try:
-                result_command = handle_command(message_text)
+                # CLI по дефолту считается запущенным от суперпользователя.
+                result_command = handle_command(message_text, True)
             except UndefinedCommand:
                 print(f"Unknown command. Press {self.signature_start_command}help to get info about available commands.")
                 continue

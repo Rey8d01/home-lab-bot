@@ -5,6 +5,6 @@ from . import register_command, ResultCommandText
 
 
 @register_command(aliases=("bash", "баш"))
-def bash(*args) -> ResultCommandText:
+def bash(*args, **kwargs) -> ResultCommandText:
     """Покажет случайную цитату с bash.im"""
     return ResultCommandText(text=get_random_quote())

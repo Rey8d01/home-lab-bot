@@ -11,8 +11,8 @@ reddit_repository = RedditRepository()
 
 
 @register_command(aliases=("r", "reddit", "р", "реддит"))
-def reddit(raw_subreddit: str = None) -> ResultCommandTextPicture:
-    """Покажет случайный пост по указанному сабреддиту или по случайному заданному в настройках."""
+def reddit(raw_subreddit: str, **kwargs) -> ResultCommandTextPicture:
+    """Покажет случайный пост по указанному сабреддиту или по случайному заданному в настройках: reddit art"""
     interesting_subreddit = raw_subreddit
     if not interesting_subreddit:
         interesting_subreddit = random.choice(settings.REPOS.REDDIT.SUBS) if settings.REPOS.REDDIT.SUBS else DEFAULT_SUBREDDIT

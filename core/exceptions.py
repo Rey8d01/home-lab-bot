@@ -25,5 +25,9 @@ class ErrorCommand(CommandException):
     pass
 
 
+class DeniedCommand(CommandException):
+    pass
+
+
 class CoreWarning(UserWarning):
     pass

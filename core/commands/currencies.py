@@ -7,8 +7,8 @@ INTERESTING_CURRENCIES = frozenset(("USD", "EUR", "RUB"))  # Валюта для
 
 
 @register_command(aliases=("converter", "conv", "cur"))
-def converter(raw_query: str) -> ResultCommandText:
-    """Конвертер валют. Принимает сумму и название валюты (rub usd eur), отдает результат в других валютах"""
+def converter(raw_query: str, **kwargs) -> ResultCommandText:
+    """Конвертер валют. Принимает сумму и название валюты (rub usd eur), отдает результат в других валютах: cur 300 usd"""
     try:
         source_currency_sum, source_currency_type = raw_query.split(maxsplit=1)
         source_currency_sum = int(source_currency_sum)

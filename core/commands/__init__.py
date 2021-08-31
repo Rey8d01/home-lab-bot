@@ -4,7 +4,7 @@
 
 Каждая функция команды должна быть задекорирована через register_command,
 все правила и разрешения будут реализовываться через нее.
-Сигнатура функции команды должна иметь как минимум (*args) для игнорирования случайно переданных лишних аргументов.
+Сигнатура функции команды должна иметь как минимум (*args, **kwargs) для игнорирования случайно переданных лишних аргументов.
 В общем случае все что идет после названия команды будет передано функцию в сыром виде, т.е. как строка.
 
 Функция команды должна возвращать результат в виде объекта класса-результата, которые объявлены ниже.
@@ -23,6 +23,7 @@ from core.exceptions import UndefinedCommand, CoreWarning, ErrorCommand
 
 logger = logging.getLogger(__name__)
 COMMANDS = {}  # Список зарегистрированных команд для вызова.
+PRIVATE_COMMANDS = []  # Список приватных команд, к которым ограничен доступ.
 HELPERS_FOR_COMMANDS = {}  # Перечень мануалов для команд.
 
 
@@ -39,11 +40,12 @@ class ResultCommandTextPicture:
     picture_url: str
 
 
-def _process_register_command(func, aliases: tuple):
+def _process_register_command(func, aliases: tuple, is_private: bool):
     """Процесс сохранения зарегистрированных команд.
 
-    Проверяется наличие команд с одинаковыми именами.
+    Проверяется наличие команд с одинаковыми алиасами, под которыми можно запустить команду.
     Генерируется описания команд для команды `help`.
+    Если был передан флаг `is_private = True`, то эта отметка сохраняется чтобы только специальные пользователи могли вызвать команду.
 
     """
     if not aliases:
@@ -55,8 +57,8 @@ def _process_register_command(func, aliases: tuple):
     if wrong_commands:
         raise CoreWarning(f"Commands {wrong_commands!r} are not unique")
 
-    for alias in aliases:
-        COMMANDS[alias] = func
+    COMMANDS.update({alias: func for alias in aliases})
+    is_private and PRIVATE_COMMANDS.extend(aliases)
 
     first_alias = aliases[0]
     other_aliases = f" ({' '.join(aliases[1:])})" if aliases[1:] else ""
@@ -65,7 +67,7 @@ def _process_register_command(func, aliases: tuple):
     return func
 
 
-def register_command(func=None, aliases: tuple = ()):
+def register_command(func=None, aliases: tuple = (), is_private: bool = False):
     """Декоратор для регистрации функций команд.
 
     Можно декоратор использовать через вызов @register_command(), так и без @register_command.
@@ -74,7 +76,7 @@ def register_command(func=None, aliases: tuple = ()):
     """
 
     def wrap(_func):
-        return _process_register_command(_func, aliases)
+        return _process_register_command(_func, aliases, is_private)
 
     if func is None:
         return wrap
@@ -99,8 +101,12 @@ def _import_commands():
             import_module(f"{__name__}.{name[:-3]}")
 
 
-def handle_command(raw_command: str) -> str:
-    """Обработка команд."""
+def handle_command(raw_command: str, is_super_user: bool = False) -> str:
+    """Общая обработка переданной команды и ее непосредственный вызов.
+
+    Если команда объявлена приватной (специальной), а флаг `is_super_user = False`, то обработка не наступит.
+
+    """
     command_parts = raw_command.split(maxsplit=1)
     command_name = command_parts[0]
     command_args = ""
@@ -118,10 +124,14 @@ def handle_command(raw_command: str) -> str:
             logger.warning(f"Call undefined command {command_name!r}")
             raise UndefinedCommand() from None
 
+    if command_name in PRIVATE_COMMANDS and not is_super_user:
+        logger.warning(f"Call private command {command_name!r} for non super user")
+        raise UndefinedCommand() from None
+
     logger.debug(f"Call command {command_name!r}")
     command_start_time = time.time()
     try:
-        result_command = fn_command(command_args)
+        result_command = fn_command(command_args, is_super_user=is_super_user)
     except Exception as error:
         logger.error("Error while executing command", exc_info=error)
         raise ErrorCommand() from None

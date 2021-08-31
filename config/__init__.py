@@ -26,7 +26,12 @@ LOCAL_TMP_PATH.mkdir(mode=0o755, exist_ok=True)
 
 # Logging
 _log_level = logging.DEBUG if settings.DEBUG else logging.WARNING
-logging.basicConfig(level=_log_level)
+logging.basicConfig(
+    format="%(levelname)s %(asctime)s %(name)s %(message)s",
+    filename=LOCAL_TMP_PATH / "hlb.log",
+    encoding="utf-8",
+    level=_log_level
+)
 logger = logging.getLogger(__name__)
 
 logger.info("Settings and logger are loaded")

@@ -1,13 +1,15 @@
 # [HLB] Home lab bot
 
-[![Build Status](http://drone.melchior.reynet/api/badges/rey/geth/status.svg)](http://drone.melchior.reynet/rey/geth)
+[![Build Status](http://drone.melchior.reynet/api/badges/rey/home-lab-bot/status.svg)](http://drone.melchior.reynet/rey/home-lab-bot)
 
-> core bot
+Чат бот для домашнего использования: если нужен простой API к своему домашнему серверу (aka home lab),
+или просто нужен фронтенд в виде бота к какому-нибудь сервису.
 
-## Цели
+* Нет жесткой зависимости от чат платформ. Поддерживается работа на (см. `core/gateways`): cli, telegram, gitter.
+* Расширяем командами (см. `core/commands`).
 
-* сделать базовый интерфейс бота который принимал бы тестовые команды и реагировал на них
-* приватный бот для общения с одним пользователем
+## todo
+
 * упаковать в докер и автоматизировать сборку - протестировать вариант питоновского приложения в докере + хранение логов в волуме
 * тесты пописать
 * линтеры добавить

@@ -9,7 +9,8 @@ import logging
 
 import requests
 
-from core.commands import handle_command, ResultCommandText, ResultCommandTextPicture
+from core.commands import handle_command
+from core.commands._libs import ResultCommandText, ResultCommandTextPicture
 from core.exceptions import UndefinedCommand, ErrorCommand
 from core.gateways._libs import GatewayInterface
 

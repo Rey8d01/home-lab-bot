@@ -1,17 +1,18 @@
 """Команды для конвертации валют."""
 
-from . import register_command, ResultCommandText
+from . import register_command
+from ._libs import ResultCommandText, ResultCommand
 from ..repositories.currencies import get_rates_for_currency
 
 INTERESTING_CURRENCIES = frozenset(("USD", "EUR", "RUB"))  # Валюта для которой будут показаны конвертации.
 
 
 @register_command(aliases=("converter", "conv", "cur"))
-def converter(raw_query: str, **kwargs) -> ResultCommandText:
+def converter(raw_query: str, **kwargs) -> ResultCommand:
     """Конвертер валют. Принимает сумму и название валюты (rub usd eur), отдает результат в других валютах: cur 300 usd"""
     try:
-        source_currency_sum, source_currency_type = raw_query.split(maxsplit=1)
-        source_currency_sum = int(source_currency_sum)
+        raw_source_currency_sum, source_currency_type = raw_query.split(maxsplit=1)
+        source_currency_sum = int(raw_source_currency_sum)
     except ValueError:
         return ResultCommandText("Ошибка обработки валют: укажите исходные данные в виде: 123 USD")
 

@@ -17,7 +17,7 @@ __currencies_info_created: Optional[float] = None  # Переменная мод
 CURRENCIES_CACHE_PATH = LOCAL_TMP_PATH / "currencies_cache.json"  # Путь до локального кеша валют.
 
 
-def receive_currencies_info() -> Optional[Dict]:
+def receive_currencies_info() -> Dict:
     """Получение информации о валютах и кеширование ее в локальный файл."""
     global __currencies_info_created
     current_time = time.time()
@@ -36,7 +36,7 @@ def receive_currencies_info() -> Optional[Dict]:
             pass
 
     if not CURRENCIES_CACHE_PATH.exists():
-        return None
+        return {}
 
     with open(CURRENCIES_CACHE_PATH) as currencies_cache_file:
         raw_currency_rates = json.load(currencies_cache_file)
@@ -46,7 +46,7 @@ def receive_currencies_info() -> Optional[Dict]:
 def get_all_currency_rates() -> Dict[str, Dict[str, float]]:
     """Вернет все коэффициенты валют между собой."""
     raw_currencies_info = receive_currencies_info()
-    currency_rates = defaultdict(lambda: defaultdict(float))
+    currency_rates: Dict[str, Dict[str, float]] = defaultdict(lambda: defaultdict(float))
     for raw_currency_info in raw_currencies_info:
         if "/" in raw_currency_info["currency"]:
             currency_from, currency_to = raw_currency_info["currency"].split("/", maxsplit=1)

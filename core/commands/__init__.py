@@ -13,31 +13,18 @@
 
 """
 
-import time
 import logging
-from dataclasses import dataclass
-from importlib import import_module
-from importlib import resources
+import time
+from importlib import import_module, resources
+from typing import Dict, Callable, List
 
+from core.commands._libs import ResultCommand
 from core.exceptions import UndefinedCommand, CoreWarning, ErrorCommand
 
 logger = logging.getLogger(__name__)
-COMMANDS = {}  # Список зарегистрированных команд для вызова.
-PRIVATE_COMMANDS = []  # Список приватных команд, к которым ограничен доступ.
-HELPERS_FOR_COMMANDS = {}  # Перечень мануалов для команд.
-
-
-@dataclass
-class ResultCommandText:
-    """Результат выполнения команды с текстом."""
-    text: str
-
-
-@dataclass
-class ResultCommandTextPicture:
-    """Результат выполнения команды с текстом и URL до картинки."""
-    text: str
-    picture_url: str
+COMMANDS: Dict[str, Callable[..., ResultCommand]] = {}  # Список зарегистрированных команд для вызова.
+PRIVATE_COMMANDS: List[str] = []  # Список приватных команд, к которым ограничен доступ.
+HELPERS_FOR_COMMANDS: Dict[str, str] = {}  # Перечень мануалов для команд.
 
 
 def _process_register_command(func, aliases: tuple, is_private: bool):
@@ -101,7 +88,7 @@ def _import_commands():
             import_module(f"{__name__}.{name[:-3]}")
 
 
-def handle_command(raw_command: str, is_super_user: bool = False) -> str:
+def handle_command(raw_command: str, is_super_user: bool = False) -> ResultCommand:
     """Общая обработка переданной команды и ее непосредственный вызов.
 
     Если команда объявлена приватной (специальной), а флаг `is_super_user = False`, то обработка не наступит.

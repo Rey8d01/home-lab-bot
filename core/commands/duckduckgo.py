@@ -4,7 +4,8 @@ from typing import Union
 
 import requests
 
-from . import register_command, ResultCommandText, ResultCommandTextPicture
+from . import register_command
+from ._libs import ResultCommandText, ResultCommandTextPicture
 
 
 @register_command(aliases=("s", "search", "ddg", "поиск"))

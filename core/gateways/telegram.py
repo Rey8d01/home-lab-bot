@@ -12,8 +12,8 @@ import requests
 import telebot
 from telebot.types import Message
 
-from core.commands import handle_command, ResultCommandText, ResultCommandTextPicture, \
-    __dir__ as list_available_commands
+from core.commands import handle_command
+from core.commands._libs import ResultCommandText, ResultCommandTextPicture
 from core.exceptions import UndefinedCommand, ErrorCommand
 from core.gateways._libs import GatewayInterface
 

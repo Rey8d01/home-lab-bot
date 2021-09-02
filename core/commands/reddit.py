@@ -21,6 +21,6 @@ def reddit(raw_subreddit: str, **kwargs) -> CommandResult:
     reddit_post_info = reddit_repository.get_random_latest_post_by_subreddit(interesting_subreddit)
     if not reddit_post_info:
         return TextCommandResult("Не удалось извлечь пост из reddit")
-    post_url, post_title, picture_url = reddit_repository.get_random_latest_post_by_subreddit(interesting_subreddit)
+    post_url, post_title, picture_url = reddit_post_info
     post_text = f"[{interesting_subreddit}] {post_title} {post_url}"
     return TextWithPictureCommandResult(post_text, picture_url) if picture_url else TextCommandResult(post_text)

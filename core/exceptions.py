@@ -5,10 +5,6 @@ class CoreException(Exception):
     pass
 
 
-class ReadSettingsException(CoreException):
-    pass
-
-
 class UndefinedGateway(CoreException):
     pass
 
@@ -22,10 +18,6 @@ class UndefinedCommand(CommandException):
 
 
 class ErrorCommand(CommandException):
-    pass
-
-
-class DeniedCommand(CommandException):
     pass
 
 

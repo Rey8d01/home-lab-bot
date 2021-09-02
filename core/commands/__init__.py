@@ -18,11 +18,11 @@ import time
 from importlib import import_module, resources
 from typing import Dict, Callable, List
 
-from core.commands._libs import ResultCommand
-from core.exceptions import UndefinedCommand, CoreWarning, ErrorCommand
+from core.commands._libs import CommandResult
+from core.exceptions import UndefinedCommand, CoreWarning, ErrorCommand, CommandException
 
 logger = logging.getLogger(__name__)
-COMMANDS: Dict[str, Callable[..., ResultCommand]] = {}  # Список зарегистрированных команд для вызова.
+COMMANDS: Dict[str, Callable[..., CommandResult]] = {}  # Список зарегистрированных команд для вызова.
 PRIVATE_COMMANDS: List[str] = []  # Список приватных команд, к которым ограничен доступ.
 HELPERS_FOR_COMMANDS: Dict[str, str] = {}  # Перечень мануалов для команд.
 
@@ -42,10 +42,10 @@ def _process_register_command(func, aliases: tuple, is_private: bool):
 
     wrong_commands = set(COMMANDS).intersection(aliases)
     if wrong_commands:
-        raise CoreWarning(f"Commands {wrong_commands!r} are not unique")
+        raise CommandException(f"Commands {wrong_commands!r} are not unique")
 
     COMMANDS.update({alias: func for alias in aliases})
-    is_private and PRIVATE_COMMANDS.extend(aliases)
+    is_private and PRIVATE_COMMANDS.extend(aliases)  # type: ignore[func-returns-value]
 
     first_alias = aliases[0]
     other_aliases = f" ({' '.join(aliases[1:])})" if aliases[1:] else ""
@@ -88,7 +88,7 @@ def _import_commands():
             import_module(f"{__name__}.{name[:-3]}")
 
 
-def handle_command(raw_command: str, is_super_user: bool = False) -> ResultCommand:
+def handle_command(raw_command: str, is_super_user: bool = False) -> CommandResult:
     """Общая обработка переданной команды и ее непосредственный вызов.
 
     Если команда объявлена приватной (специальной), а флаг `is_super_user = False`, то обработка не наступит.
@@ -102,11 +102,11 @@ def handle_command(raw_command: str, is_super_user: bool = False) -> ResultComma
 
     # Если команда не была найдена при первом обращении, происходит импорт всех команд и повторный ее вызов.
     try:
-        fn_command = COMMANDS[command_name]
+        command_function = COMMANDS[command_name]
     except KeyError:
         _import_commands()
         if command_name in COMMANDS:
-            fn_command = COMMANDS[command_name]
+            command_function = COMMANDS[command_name]
         else:
             logger.warning(f"Call undefined command {command_name!r}")
             raise UndefinedCommand() from None
@@ -118,7 +118,7 @@ def handle_command(raw_command: str, is_super_user: bool = False) -> ResultComma
     logger.debug(f"Call command {command_name!r}")
     command_start_time = time.time()
     try:
-        result_command = fn_command(command_args, is_super_user=is_super_user)
+        command_result = command_function(command_args, is_super_user=is_super_user)
     except Exception as error:
         logger.error("Error while executing command", exc_info=error)
         raise ErrorCommand() from None
@@ -126,4 +126,4 @@ def handle_command(raw_command: str, is_super_user: bool = False) -> ResultComma
     command_delta = int((time.time() - command_start_time) * 1000)
     logger.debug(f"Call command {command_name!r} ended in {command_delta} ms")
 
-    return result_command
+    return command_result

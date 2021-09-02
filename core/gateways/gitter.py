@@ -10,7 +10,7 @@ import logging
 import requests
 
 from core.commands import handle_command
-from core.commands._libs import ResultCommandText, ResultCommandTextPicture
+from core.commands._libs import TextCommandResult, TextWithPictureCommandResult
 from core.exceptions import UndefinedCommand, ErrorCommand
 from core.gateways._libs import GatewayInterface
 
@@ -59,9 +59,9 @@ class Gateway(GatewayInterface):
                 continue
 
             printable_result = "Unknown result type"
-            if isinstance(result_command, ResultCommandText):
+            if isinstance(result_command, TextCommandResult):
                 printable_result = result_command.text
-            elif isinstance(result_command, ResultCommandTextPicture):
+            elif isinstance(result_command, TextWithPictureCommandResult):
                 printable_result = f"""{result_command.text}\n![pic]({result_command.picture_url})"""
             self.send_message_in_room(self.active_room, printable_result)
 

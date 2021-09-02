@@ -5,14 +5,14 @@ from typing import Union
 import requests
 
 from . import register_command
-from ._libs import ResultCommandText, ResultCommandTextPicture
+from ._libs import TextCommandResult, TextWithPictureCommandResult
 
 
 @register_command(aliases=("s", "search", "ddg", "поиск"))
-def search(raw_query: str, **kwargs) -> Union[ResultCommandText, ResultCommandTextPicture]:
+def search(raw_query: str, **kwargs) -> Union[TextCommandResult, TextWithPictureCommandResult]:
     """Search - простой поиск через duckduckgo, принимает строку для поиска: search cats"""
     if not raw_query:
-        return ResultCommandText("Ничего не получилось найти :(")
+        return TextCommandResult("Ничего не получилось найти :(")
 
     complete_query = "+".join(raw_query.split())
     request = requests.get(f"https://api.duckduckgo.com/?q={complete_query}&format=json")
@@ -28,9 +28,9 @@ def search(raw_query: str, **kwargs) -> Union[ResultCommandText, ResultCommandTe
         abstract_result = f"{result_search_query['AbstractText']} {result_search_query['AbstractURL']}".strip()
 
     if not abstract_result and not parsed_results:
-        return ResultCommandText("Ничего не получилось найти :(")
+        return TextCommandResult("Ничего не получилось найти :(")
     common_results = f"{abstract_result}\n{parsed_results}"
 
     if result_search_query["Image"]:
-        return ResultCommandTextPicture(common_results, result_search_query["Image"])
-    return ResultCommandText(common_results)
+        return TextWithPictureCommandResult(common_results, result_search_query["Image"])
+    return TextCommandResult(common_results)

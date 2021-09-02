@@ -31,7 +31,7 @@ logging.basicConfig(
     filename=LOCAL_TMP_PATH / "hlb.log",
     encoding="utf-8",
     level=_log_level
-)
+)  # type: ignore[call-arg]
 logger = logging.getLogger(__name__)
 
 logger.info("Settings and logger are loaded")

@@ -5,14 +5,14 @@ import random
 from config import settings
 from core.repositories.reddit import RedditRepository
 from . import register_command
-from ._libs import ResultCommandText, ResultCommandTextPicture, ResultCommand
+from ._libs import TextCommandResult, TextWithPictureCommandResult, CommandResult
 
 DEFAULT_SUBREDDIT = "all"  # Если интересные сабреддиты в конфиге не указаны, будет использован этот.
 reddit_repository = RedditRepository()
 
 
 @register_command(aliases=("r", "reddit", "р", "реддит"))
-def reddit(raw_subreddit: str, **kwargs) -> ResultCommand:
+def reddit(raw_subreddit: str, **kwargs) -> CommandResult:
     """Покажет случайный пост по указанному сабреддиту или по случайному заданному в настройках: reddit art"""
     interesting_subreddit = raw_subreddit
     if not interesting_subreddit:
@@ -20,7 +20,7 @@ def reddit(raw_subreddit: str, **kwargs) -> ResultCommand:
 
     reddit_post_info = reddit_repository.get_random_latest_post_by_subreddit(interesting_subreddit)
     if not reddit_post_info:
-        return ResultCommandText("Не удалось извлечь пост из reddit")
+        return TextCommandResult("Не удалось извлечь пост из reddit")
     post_url, post_title, picture_url = reddit_repository.get_random_latest_post_by_subreddit(interesting_subreddit)
     post_text = f"[{interesting_subreddit}] {post_title} {post_url}"
-    return ResultCommandTextPicture(post_text, picture_url) if picture_url else ResultCommandText(post_text)
+    return TextWithPictureCommandResult(post_text, picture_url) if picture_url else TextCommandResult(post_text)

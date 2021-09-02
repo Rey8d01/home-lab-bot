@@ -27,12 +27,14 @@ signature_start_command = "/"
 [default.im.gitter]
 signature_start_command = "/"
 signature_message_bot = "**[HLB]**"
+# Документация на API для получения токенов https://developer.gitter.im/docs/welcome
 token = ""
 active_room = ""
 
 # telegram.org
 [default.im.telegram]
 signature_start_command = "/"
+# Документация на API для получения токенов https://core.telegram.org/bots/api
 token = 0
 # Id пользователя, для которого доступны приватные команды.
 super_user_id = 0

@@ -2,19 +2,19 @@
 from dataclasses import dataclass
 
 
-class ResultCommand:
+class CommandResult:
     """Интерфейсный класс для результатов выполнения команд."""
     pass
 
 
 @dataclass
-class ResultCommandText(ResultCommand):
+class TextCommandResult(CommandResult):
     """Результат выполнения команды с текстом."""
     text: str
 
 
 @dataclass
-class ResultCommandTextPicture(ResultCommand):
+class TextWithPictureCommandResult(CommandResult):
     """Результат выполнения команды с текстом и URL до картинки."""
     text: str
     picture_url: str

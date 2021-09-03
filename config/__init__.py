@@ -28,8 +28,8 @@ LOCAL_TMP_PATH.mkdir(mode=0o755, exist_ok=True)
 _log_level = logging.DEBUG if settings.DEBUG else logging.WARNING
 logging.basicConfig(
     format="%(levelname)s %(asctime)s %(name)s %(message)s",
-    filename=LOCAL_TMP_PATH / "hlb.log",
-    encoding="utf-8",
+    # filename=LOCAL_TMP_PATH / "hlb.log",
+    # encoding="utf-8",
     level=_log_level
 )  # type: ignore[call-arg]
 logger = logging.getLogger(__name__)

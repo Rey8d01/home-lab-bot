@@ -39,5 +39,5 @@
 
 ### Heroku
 
-Procfile - Инструкции для запуска бота.
-runtime.txt - Настройка версии python.
+Файлы `Procfile` и `runtime.txt` нужны для запуска бота через Heroku Git.
+Buildpacks: `heroku/python`. Настройки передавать в разделе Settings/Config Vars как переменные окружения (детали см. в `config/`).

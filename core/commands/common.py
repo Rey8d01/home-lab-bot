@@ -44,11 +44,12 @@ def who(*args, **kwargs) -> CommandResult:
 
 @register_command(is_private=True)
 def sleep(sleep_seconds: int = 5, **kwargs) -> CommandResult:
-    """Усыпит бота на указанное количество секунд (5 по умолчанию): sleep 10"""
+    """Усыпит бота на указанное количество секунд (5 по умолчанию, макс. 60): sleep 10"""
     try:
         sleep_seconds = int(sleep_seconds)
     except ValueError:
         sleep_seconds = 5
 
-    sleep_seconds > 0 and time.sleep(sleep_seconds)  # type: ignore[func-returns-value]
+    if 0 < sleep_seconds < 60:
+        time.sleep(sleep_seconds)
     return TextCommandResult(f"{settings.TITLE} have slept enough")

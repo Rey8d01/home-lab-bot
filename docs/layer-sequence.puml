@@ -1,0 +1,20 @@
+@startuml
+
+actor       client
+control     gateway
+control     handler_command
+participant command
+database    repository
+
+== core.gateways.start_talk() ==
+
+client -> gateway ++ : text message:str
+gateway -> handler_command ++ : command text:str
+handler_command -> command ++ : args:str
+command -> repository ++ : request:any
+return data:any
+return :CommandResult
+return :CommandResult
+return result
+
+@enduml

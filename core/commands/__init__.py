@@ -1,25 +1,11 @@
-"""Основной программный API.
-
-Все команды публикуются в текущем модуле и будут динамически подгружаться (без явного импорта).
-
-Каждая функция команды должна быть задекорирована через register_command,
-все правила и разрешения будут реализовываться через нее.
-Сигнатура функции команды должна иметь как минимум (*args, **kwargs) для игнорирования случайно переданных лишних аргументов.
-В общем случае все что идет после названия команды будет передано функцию в сыром виде, т.е. как строка.
-
-Функция команды должна возвращать результат в виде объекта класса-результата, которые объявлены ниже.
-Это нужно чтобы стандартизировать ответ,
-а каждая платформа сама сможет его интерпретировать и отправлять результат в нужном для нее виде.
-
-"""
-
+"""Модуль для регистрации и обработки команд."""
 import logging
 import time
 from importlib import import_module, resources
 from typing import Dict, Callable, List
 
 from core.commands._libs import CommandResult
-from core.exceptions import UndefinedCommand, CoreWarning, ErrorCommand, CommandException
+from core.exceptions import UndefinedCommand, ErrorCommand, CommandException
 
 logger = logging.getLogger(__name__)
 COMMANDS: Dict[str, Callable[..., CommandResult]] = {}  # Список зарегистрированных команд для вызова.

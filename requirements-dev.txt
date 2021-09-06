@@ -1,4 +1,4 @@
 pytest==6.2.4
 pytest-mock==3.6.1
 mypy==0.910
-ipython==*
+ipython>=7.*

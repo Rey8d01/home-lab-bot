@@ -1,6 +1,6 @@
-requests
-requests_html
-toml
-dynaconf
-PyTelegramBotAPI
-praw
+requests==2.26.0
+requests_html==0.10.0
+toml==0.10.2
+dynaconf==3.1.5
+PyTelegramBotAPI==3.8.3
+praw==7.4.0

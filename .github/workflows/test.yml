@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: run test
+    name: Run mypy and pylint
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2

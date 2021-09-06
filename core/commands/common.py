@@ -35,7 +35,7 @@ def _help(*args, **kwargs) -> CommandResult:
 
 @register_command(is_private=True)
 def who(*args, **kwargs) -> CommandResult:
-    """Отобразит сведения по платформе на которой запущена программа."""
+    """Приватная функция. Отобразит сведения по платформе на которой запущена программа."""
     request = requests.get("https://api.ipify.org?format=json")
     white_ip = request.json()["ip"]
     name_os = os.uname()
@@ -44,7 +44,7 @@ def who(*args, **kwargs) -> CommandResult:
 
 @register_command(is_private=True)
 def sleep(sleep_seconds: int = 5, **kwargs) -> CommandResult:
-    """Усыпит бота на указанное количество секунд (5 по умолчанию, макс. 60): sleep 10"""
+    """Приватная функция. Усыпит бота на указанное количество секунд (5 по умолчанию, макс. 60): sleep 10"""
     try:
         sleep_seconds = int(sleep_seconds)
     except ValueError:

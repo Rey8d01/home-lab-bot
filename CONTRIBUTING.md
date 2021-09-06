@@ -30,7 +30,9 @@
 
 ### Порядок работы
 
-`./docs/layer-sequence.puml`
+![layer-sequence](https://user-images.githubusercontent.com/4836190/132241020-89ef0307-b49a-4654-88ea-b0c01398566b.png)
+
+_./docs/layer-sequence.puml_
 
 #### Настройка `./config/`
 

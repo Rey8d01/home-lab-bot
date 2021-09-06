@@ -1,7 +1,5 @@
 # [HLB] Home lab bot
 
-[![Build Status](http://drone.melchior.reynet/api/badges/rey/home-lab-bot/status.svg)](http://drone.melchior.reynet/rey/home-lab-bot)
-
 Чат бот для домашнего использования: если нужен простой API к своему домашнему серверу (aka home lab),
 или просто нужен фронтенд в виде бота к какому-нибудь сервису.
 
@@ -11,11 +9,6 @@
 * Требуется python 3.9
 
 Положения по дизайну описаны в CONTRIBUTING.md
-
-## todo
-
-* оформить CONTRIBUTING.md
-* автоматизировать локальный деплой
 
 ## Запуск
 

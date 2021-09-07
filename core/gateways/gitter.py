@@ -25,6 +25,7 @@ class Gateway(GatewayInterface):
         self.active_room = im_settings["active_room"]
         self.signature_message_bot = im_settings["signature_message_bot"]
         self.signature_start_command = im_settings["signature_start_command"]
+        self.super_user_id = im_settings["super_user_id"]
 
         self.url_rest_api = "https://api.gitter.im/v1"
         self.url_stream_api = "https://stream.gitter.im/v1"
@@ -40,6 +41,7 @@ class Gateway(GatewayInterface):
             logger.debug(f"Received message: {encoded_message!r}")
             decoded_message = json.loads(encoded_message)
             message_text = str(decoded_message["text"]).strip()
+            is_super_user = decoded_message.get("fromUser", {}).get("id", "") == self.super_user_id
             # Если сообщение в чате исходит от бота - пропускаем обработку.
             if message_text.startswith(self.signature_message_bot):
                 continue
@@ -50,7 +52,7 @@ class Gateway(GatewayInterface):
                 message_text = message_text.removeprefix(self.signature_start_command)
 
             try:
-                result_command = handle_command(message_text)
+                result_command = handle_command(message_text, is_super_user)
             except UndefinedCommand:
                 self.send_message_in_room(self.active_room, "Undefined command")
                 continue

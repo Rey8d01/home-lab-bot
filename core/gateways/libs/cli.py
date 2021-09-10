@@ -3,7 +3,7 @@
 from core.commands import handle_command
 from core.commands._libs import TextCommandResult, TextWithPictureCommandResult
 from core.exceptions import UndefinedCommand, ErrorCommand
-from core.gateways._libs import GatewayInterface
+from core.gateways.interfaces import GatewayInterface
 
 
 class Gateway(GatewayInterface):

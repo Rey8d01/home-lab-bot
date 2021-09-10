@@ -7,7 +7,7 @@
 
 import logging
 
-from core.gateways import start_talk
+from core.gateways.start_talk import start_talk
 from core.services.signals import setup_signal_handlers
 
 logger = logging.getLogger(__name__)

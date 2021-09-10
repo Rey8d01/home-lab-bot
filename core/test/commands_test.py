@@ -4,7 +4,8 @@ from itertools import product
 import pytest
 
 import core.commands
-from core.commands import CommandResult
+import core.commands.utils
+from core.commands.interfaces import CommandResult
 from core.exceptions import CommandException
 
 
@@ -21,7 +22,7 @@ def test_handle_command_for_user(mocker, command: str, is_super_user: bool):
     mocker.patch("core.repositories.bashim.get_random_quote")
     mocker.patch("requests.get")
     try:
-        command_result = core.commands.handle_command(command, is_super_user)
+        command_result = core.commands.utils.handle_command(command, is_super_user)
         assert isinstance(command_result, CommandResult), "result command should be type of CommandResult or raise CommandException"
     except Exception as error:
         with pytest.raises(CommandException):

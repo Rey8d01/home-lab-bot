@@ -32,7 +32,7 @@ class Gateway(GatewayInterface):
                 print(f"Unknown command. Press {self.signature_start_command}help to get info about available commands.")
                 continue
             except ErrorCommand:
-                print(f"Error in command. Check logs for details.")
+                print("Error in command. Check logs for details.")
                 continue
 
             printable_result = "Unknown result type"

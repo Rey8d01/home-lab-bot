@@ -3,7 +3,7 @@
 import logging
 import time
 from importlib import resources, import_module
-from typing import Dict, Callable, List
+from typing import Dict, Callable, List, Optional
 
 from core.commands.interfaces import CommandResult
 from core.exceptions import CommandException, UndefinedCommand, ErrorCommand
@@ -86,7 +86,7 @@ def handle_command(raw_command: str, is_super_user: bool = False) -> CommandResu
         command_function = COMMANDS[command_name]
     except KeyError:
         _import_commands()
-        command_function = COMMANDS.get(command_name)
+        command_function: Optional[Callable[..., CommandResult]] = COMMANDS.get(command_name)  # type: ignore[no-redef]
         if command_function is None:
             logger.warning(f"Call undefined command {command_name!r}")
             raise UndefinedCommand() from None

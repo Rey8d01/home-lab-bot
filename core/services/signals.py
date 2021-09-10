@@ -1,7 +1,7 @@
 """Обработка Unix signals."""
 
-import signal
 import logging
+import signal
 
 logger = logging.getLogger(__name__)
 

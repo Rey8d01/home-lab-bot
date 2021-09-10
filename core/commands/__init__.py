@@ -91,9 +91,8 @@ def handle_command(raw_command: str, is_super_user: bool = False) -> CommandResu
         command_function = COMMANDS[command_name]
     except KeyError:
         _import_commands()
-        if command_name in COMMANDS:
-            command_function = COMMANDS[command_name]
-        else:
+        command_function = COMMANDS.get(command_name)
+        if command_function is None:
             logger.warning(f"Call undefined command {command_name!r}")
             raise UndefinedCommand() from None
 

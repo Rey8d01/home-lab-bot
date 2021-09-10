@@ -38,7 +38,7 @@ class Gateway(GatewayInterface):
     def talk(self):
         """Запускает интерфейс общения с чатом в gitter."""
         for encoded_message in self.listen_stream_messages(self.active_room):
-            logger.debug(f"Received message: {encoded_message!r}")
+            logger.debug(f"[GITTER] Received message: {encoded_message!r}")
             decoded_message = json.loads(encoded_message)
             message_text = str(decoded_message["text"]).strip()
             is_super_user = decoded_message.get("fromUser", {}).get("id", "") == self.super_user_id
@@ -67,7 +67,7 @@ class Gateway(GatewayInterface):
                 printable_result = f"""{result_command.text}\n![pic]({result_command.picture_url})"""
             self.send_message_in_room(self.active_room, printable_result)
 
-    def list_rooms(self):
+    def list_rooms(self) -> dict:
         """Вернет всю информацию по всем доступным комнатам."""
         url = f"{self.url_rest_api}/rooms"
         request = requests.get(url, headers=self.headers)
@@ -77,10 +77,9 @@ class Gateway(GatewayInterface):
         """Отправит сообщение в комнату."""
         url = f"{self.url_rest_api}/rooms/{room_id}/chatMessages"
         payload = {"text": f"{self.signature_message_bot}\n{text}"}
-        request = requests.post(url, data=json.dumps(payload), headers=self.headers)
-        return request
+        requests.post(url, data=json.dumps(payload), headers=self.headers)
 
-    def list_messages(self, room_id: str):
+    def list_messages(self, room_id: str) -> dict:
         """Вернет список сообщений в комнате."""
         url = f"{self.url_rest_api}/rooms/{room_id}/chatMessages?limit=5"
         request = requests.get(url, headers=self.headers)

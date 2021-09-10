@@ -5,13 +5,12 @@
 
 """
 
-from core.gateways import start_talk
 import logging
 
+from core.gateways import start_talk
 from core.services.signals import setup_signal_handlers
 
 logger = logging.getLogger(__name__)
-
 
 if __name__ == "__main__":
     logger.info("Start bot")
@@ -19,6 +18,6 @@ if __name__ == "__main__":
     setup_signal_handlers()
     try:
         start_talk()
-    except SystemExit as e:
+    except SystemExit:
         # todo shutdown
         pass

@@ -2,24 +2,24 @@
 
 
 class CoreException(Exception):
-    pass
+    """Общее исключение. Требует наследования, для уточнения ситуации."""
 
 
 class UndefinedGateway(CoreException):
-    pass
+    """Исключение для ситуаций с ошибками определения платформы для работы бота."""
 
 
 class CommandException(CoreException):
-    pass
+    """Общее исключение для ошибок при выполнении команд."""
 
 
 class UndefinedCommand(CommandException):
-    pass
+    """Ошибка определения команды."""
 
 
 class ErrorCommand(CommandException):
-    pass
+    """Ошибка выполнения команды."""
 
 
 class CoreWarning(UserWarning):
-    pass
+    """Общее предупреждение. Требует наследования, для уточнения ситуации."""

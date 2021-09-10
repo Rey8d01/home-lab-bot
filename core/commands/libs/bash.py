@@ -1,8 +1,8 @@
 """Команды для использования цитатника."""
 
+from core.commands.interfaces import TextCommandResult, CommandResult
+from core.commands.utils import register_command
 from core.repositories.bashim import get_random_quote
-from . import register_command
-from ._libs import TextCommandResult, CommandResult
 
 
 @register_command(aliases=("bash", "баш"))

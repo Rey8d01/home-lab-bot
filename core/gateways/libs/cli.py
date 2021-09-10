@@ -1,7 +1,7 @@
 """Интерфейс работы с CLI."""
 
-from core.commands import handle_command
-from core.commands._libs import TextCommandResult, TextWithPictureCommandResult
+from core.commands.interfaces import TextCommandResult, TextWithPictureCommandResult
+from core.commands.utils import handle_command
 from core.exceptions import UndefinedCommand, ErrorCommand
 from core.gateways.interfaces import GatewayInterface
 

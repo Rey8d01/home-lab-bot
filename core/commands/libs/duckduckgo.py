@@ -4,8 +4,8 @@ from typing import Union
 
 import requests
 
-from . import register_command
-from ._libs import TextCommandResult, TextWithPictureCommandResult
+from core.commands.interfaces import TextCommandResult, TextWithPictureCommandResult
+from core.commands.utils import register_command
 
 
 @register_command(aliases=("s", "search", "ddg", "поиск"))

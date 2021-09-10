@@ -1,8 +1,8 @@
 """Команды для конвертации валют."""
 
-from . import register_command
-from ._libs import TextCommandResult, CommandResult
-from ..repositories.currencies import get_rates_for_currency
+from core.commands.interfaces import TextCommandResult, CommandResult
+from core.commands.utils import register_command
+from core.repositories.currencies import get_rates_for_currency
 
 INTERESTING_CURRENCIES = frozenset(("USD", "EUR", "RUB"))  # Валюта для которой будут показаны конвертации.
 

@@ -3,9 +3,9 @@
 import random
 
 from config import settings
+from core.commands.interfaces import TextCommandResult, TextWithPictureCommandResult, CommandResult
+from core.commands.utils import register_command
 from core.repositories.reddit import RedditRepository
-from . import register_command
-from ._libs import TextCommandResult, TextWithPictureCommandResult, CommandResult
 
 DEFAULT_SUBREDDIT = "all"  # Если интересные сабреддиты в конфиге не указаны, будет использован этот.
 reddit_repository = RedditRepository()

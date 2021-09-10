@@ -6,8 +6,8 @@ import time
 import requests
 
 from config import settings
-from . import register_command, HELPERS_FOR_COMMANDS, PRIVATE_COMMANDS
-from ._libs import TextCommandResult, CommandResult
+from core.commands.interfaces import TextCommandResult, CommandResult
+from core.commands.utils import PRIVATE_COMMANDS, HELPERS_FOR_COMMANDS, register_command
 
 
 @register_command

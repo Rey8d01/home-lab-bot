@@ -1,7 +1,6 @@
 """Базовые классы модуля и его интерфейсы."""
 
 from dataclasses import dataclass
-from typing import BinaryIO, Optional
 
 
 class CommandResult:
@@ -29,5 +28,5 @@ class TextWithPictureFileCommandResult(CommandResult):
 
     """
     text: str
-    picture_as_bytes: BinaryIO
-    picture_as_str: Optional[str]
+    picture_as_bytes: bytes
+    picture_as_str: str

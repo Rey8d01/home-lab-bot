@@ -2,7 +2,8 @@
 
 import logging
 import time
-from importlib import resources, import_module
+from importlib import import_module
+from pkgutil import walk_packages
 from typing import Dict, Callable, List, Optional
 
 from core.commands.interfaces import CommandResult
@@ -57,16 +58,16 @@ def register_command(func=None, aliases: tuple = (), is_private: bool = False):
     return wrap(func)
 
 
-def _import_commands():
-    """Импортирует все ресурсы для регистрации команд.
-
-    Поиск и импорт всех .py файлов в текущем модуле, кроме текущего __init__.py
-
-    """
-    for module_file_name in resources.contents("core.commands.libs"):
-        if module_file_name.endswith(".py") and not module_file_name == "__init__.py":
-            logger.debug(f"Import module of commands {module_file_name!r}")
-            import_module(f"core.commands.libs.{module_file_name.removesuffix('.py')}")
+def _import_commands(module_name: str = None):
+    """Рекурсивно импортирует все модули в ./libs для регистрации команд."""
+    module_name = module_name or "core.commands.libs"
+    module = import_module(module_name)
+    for _, name_submodule, is_pkg in walk_packages(module.__path__):
+        logger.debug(f"Import module of commands {module_name!r}")
+        full_submodule_name = f"{module_name}.{name_submodule}"
+        import_module(full_submodule_name)
+        if is_pkg:
+            _import_commands(full_submodule_name)
 
 
 def handle_command(raw_command: str, is_super_user: bool = False) -> CommandResult:

@@ -12,7 +12,7 @@ import requests
 import telebot
 from telebot.types import Message
 
-from core.commands.interfaces import TextCommandResult, TextWithPictureCommandResult
+from core.commands.interfaces import TextCommandResult, TextWithPictureURLCommandResult, TextWithPictureFileCommandResult
 from core.commands.utils import handle_command
 from core.exceptions import UndefinedCommand, ErrorCommand
 from core.gateways.interfaces import GatewayInterface
@@ -63,12 +63,15 @@ class Gateway(GatewayInterface):
             printable_result = "Unknown result type"
             if isinstance(result_command, TextCommandResult):
                 printable_result = result_command.text
-            elif isinstance(result_command, TextWithPictureCommandResult):
+            elif isinstance(result_command, TextWithPictureURLCommandResult):
                 printable_result = result_command.text
                 # Картинки требуют предварительной загрузки и отправки в бинарном виде.
                 if result_command.picture_url:
                     picture = io.BytesIO(requests.get(result_command.picture_url).content)
                     self.telebot.send_photo(message.from_user.id, picture)
+            elif isinstance(result_command, TextWithPictureFileCommandResult):
+                printable_result = result_command.text
+                self.telebot.send_photo(message.from_user.id, result_command.picture_as_bytes)
             self.telebot.send_message(message.from_user.id, printable_result)
 
         while True:

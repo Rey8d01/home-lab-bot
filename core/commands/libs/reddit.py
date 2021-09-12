@@ -3,7 +3,7 @@
 import random
 
 from config import settings
-from core.commands.interfaces import TextCommandResult, TextWithPictureCommandResult, CommandResult
+from core.commands.interfaces import TextCommandResult, TextWithPictureURLCommandResult, CommandResult
 from core.commands.utils import register_command
 from core.repositories.reddit import RedditRepository
 
@@ -23,4 +23,4 @@ def reddit(raw_subreddit: str, **kwargs) -> CommandResult:
         return TextCommandResult("Не удалось извлечь пост из reddit")
     post_url, post_title, picture_url = reddit_post_info
     post_text = f"[{interesting_subreddit}] {post_title} {post_url}"
-    return TextWithPictureCommandResult(post_text, picture_url) if picture_url else TextCommandResult(post_text)
+    return TextWithPictureURLCommandResult(post_text, picture_url) if picture_url else TextCommandResult(post_text)

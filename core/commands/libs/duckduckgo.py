@@ -4,12 +4,12 @@ from typing import Union
 
 import requests
 
-from core.commands.interfaces import TextCommandResult, TextWithPictureCommandResult
+from core.commands.interfaces import TextCommandResult, TextWithPictureURLCommandResult
 from core.commands.utils import register_command
 
 
 @register_command(aliases=("s", "search", "ddg", "поиск"))
-def search(raw_query: str, **kwargs) -> Union[TextCommandResult, TextWithPictureCommandResult]:
+def search(raw_query: str, **kwargs) -> Union[TextCommandResult, TextWithPictureURLCommandResult]:
     """Search - простой поиск через duckduckgo, принимает строку для поиска: search cats"""
     if not raw_query:
         return TextCommandResult("Ничего не получилось найти :(")
@@ -32,5 +32,5 @@ def search(raw_query: str, **kwargs) -> Union[TextCommandResult, TextWithPicture
     common_results = f"{abstract_result}\n{parsed_results}"
 
     if result_search_query["Image"]:
-        return TextWithPictureCommandResult(common_results, result_search_query["Image"])
+        return TextWithPictureURLCommandResult(common_results, result_search_query["Image"])
     return TextCommandResult(common_results)

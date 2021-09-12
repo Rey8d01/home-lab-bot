@@ -58,12 +58,12 @@ def register_command(func=None, aliases: tuple = (), is_private: bool = False):
     return wrap(func)
 
 
-def _import_commands(module_name: str = "core.commands.libs"):
-    """Рекурсивно импортирует все модули в ./libs для регистрации команд."""
-    module = import_module(module_name)
-    for _, name_submodule, is_pkg in walk_packages(module.__path__):
-        logger.debug(f"Import module of commands {module_name!r}")
-        full_submodule_name = f"{module_name}.{name_submodule}"
+def _import_commands(package_name: str = "core.commands.libs"):
+    """Рекурсивно импортирует все модули в пакете ./libs для регистрации команд."""
+    package = import_module(package_name)
+    for _, name_submodule, is_pkg in walk_packages(package.__path__):  # type: ignore[attr-defined]
+        logger.debug(f"Import package of commands {package_name!r}")
+        full_submodule_name = f"{package_name}.{name_submodule}"
         import_module(full_submodule_name)
         if is_pkg:
             _import_commands(full_submodule_name)

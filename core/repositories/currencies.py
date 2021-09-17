@@ -15,16 +15,17 @@ from config import LOCAL_TMP_PATH
 
 __currencies_info_created: Optional[float] = None  # Переменная модуля для локального отслеживания времени жизни кеша данных о валютах.
 CURRENCIES_CACHE_PATH = LOCAL_TMP_PATH / "currencies_cache.json"  # Путь до локального кеша валют.
+LOCAL_CACHE_TTL = 3600
 
 
 def receive_currencies_info() -> Dict:
     """Получение информации о валютах и кеширование ее в локальный файл."""
     global __currencies_info_created
     current_time = time.time()
-    if not __currencies_info_created or (current_time - __currencies_info_created) > 3600:  # ttl local cache.
+    if not __currencies_info_created or (current_time - __currencies_info_created) > LOCAL_CACHE_TTL:
         __currencies_info_created = current_time
 
-        rates_request = requests.get(f"https://www.live-rates.com/rates")
+        rates_request = requests.get("https://www.live-rates.com/rates")
         try:
             # Если json парсится нормально и не выбрасывает ошибок, значит можно его закешировать.
             # В противном случае старый кеш тоже можно использовать.

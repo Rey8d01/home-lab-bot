@@ -19,7 +19,7 @@ def converter(raw_query: str, **kwargs) -> CommandResult:
     source_currency_type = source_currency_type.upper()
     interesting_currency_rates = get_rates_for_currency(source_currency_type, INTERESTING_CURRENCIES)
     if not interesting_currency_rates:
-        return TextCommandResult(f"Ошибка обработки валют: курс валют определить не удалось")
+        return TextCommandResult("Ошибка обработки валют: курс валют определить не удалось")
 
     printable_result = "; ".join(f"{source_currency_sum * rate:.2f} {currency}" for currency, rate in interesting_currency_rates.items())
     return TextCommandResult(f"Расчет валюты для {source_currency_sum} {source_currency_type}: {printable_result}")
